@@ -1,1 +1,1 @@
-export * from './lib/user.module'
+export { IUser } from './lib/user.module';
