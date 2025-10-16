@@ -6,6 +6,7 @@ tmp
 out-tsc
 
 /envs
+/mongo-data-4.4
 
 # dependencies
 node_modules
