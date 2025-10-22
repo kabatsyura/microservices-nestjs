@@ -1,1 +1,2 @@
-export { IUser } from './lib/user.module';
+export { IUser } from './lib/user.interface';
+export { IJWTPayload } from './lib/auth.interface';

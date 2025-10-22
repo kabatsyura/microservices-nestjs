@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../user/repositories/user.repository';
-import { UserEntity } from '../user/entities/user.entity';
-import { UserRole } from 'interfaces/src/lib/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { AccountRegister } from '@purple/contracts';
+import { UserEntity } from '../user/entities/user.entity';
+import { UserRepository } from '../user/repositories/user.repository';
+import { UserRole } from 'interfaces/src/lib/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -15,9 +15,8 @@ export class AuthService {
   async register({ email, password, displayName }: AccountRegister.Request) {
     const oldUser = await this.userRepository.findUser(email);
     if (oldUser) {
-      throw new Error('Пользователь уже зарегистрирован');
+      throw new Error('Такой пользователь уже зарегистрирован');
     }
-
     const newUserEntity = await new UserEntity({
       displayName,
       email,
@@ -32,19 +31,17 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUser(email);
-
     if (!user) {
-      throw new Error('Неверный логин или пароль!');
+      throw new Error('Неверный логин или пароль');
     }
-
     const userEntity = new UserEntity(user);
-    const isCorrectPassword = userEntity.validatePassword(password);
+    const isCorrectPassword = await userEntity.validatePassword(password);
 
     if (!isCorrectPassword) {
-      throw new Error('Неверный логин или пароль!');
+      throw new Error('Неверный логин или пароль');
     }
 
-    return { id: user.id };
+    return { id: user._id };
   }
 
   async login(id: string) {

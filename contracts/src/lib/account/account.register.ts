@@ -7,8 +7,10 @@ export namespace AccountRegister {
   export class Request {
     @IsEmail()
     email!: string;
+
     @IsString()
     password!: string;
+
     @IsOptional()
     @IsString()
     displayName?: string;

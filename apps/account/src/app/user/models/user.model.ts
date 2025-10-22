@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { IUser } from '@purple/interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { UserRole } from 'interfaces/src/lib/user.module';
+import { UserRole } from 'interfaces/src/lib/user.interface';
 
 @Schema()
 export class User extends Document<string> implements IUser {
