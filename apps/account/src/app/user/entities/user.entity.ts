@@ -1,4 +1,5 @@
-import { IUser } from '@purple/interfaces';
+import { AccountChangedCourse } from '@purple/contracts';
+import { IDomainEvent, IUser } from '@purple/interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 import {
   IUserCourses,
@@ -13,6 +14,7 @@ export class UserEntity implements IUser {
   passwordHash: string;
   role: UserRole;
   courses?: IUserCourses[];
+  events: IDomainEvent[] = [];
 
   constructor(user: IUser) {
     this._id = user._id;
@@ -53,6 +55,12 @@ export class UserEntity implements IUser {
         course.purchaseState = state;
         return course;
       }
+
+      this.events.push({
+        topic: AccountChangedCourse.topic,
+        data: { userId: this._id, courseId, state },
+      });
+
       return course;
     });
   }
